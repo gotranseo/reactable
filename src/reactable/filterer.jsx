@@ -29,7 +29,7 @@ export class Filterer extends React.Component {
                 <td colSpan={this.props.colSpan}>
                     <FiltererInput onFilter={this.props.onFilter}
                         value={this.props.value}
-                        placeholder={this.props.placeholder}
+                        placeholder="Search"
                         className={this.props.className ? 'reactable-filter-input ' + this.props.className : 'reactable-filter-input'} />
                 </td>
             </tr>

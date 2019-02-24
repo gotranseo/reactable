@@ -21,33 +21,19 @@ export class Paginator extends React.Component {
     }
 
     renderPrevious() {
-        if(this.props.currentPage > 0) {
-            return <a className='reactable-previous-page'
-                      href={pageHref(this.props.currentPage - 1)}
-                      onClick={this.handlePrevious.bind(this)}>
-                        {this.props.previousPageLabel || 'Previous'}
-                   </a>
+        if (this.props.currentPage > 0) {
+            return (<li className="page-item"><a className="page-link" href={pageHref(this.props.currentPage - 1)} onClick={this.handlePrevious.bind(this)}>Previous</a></li>);
         }
     }
 
     renderNext() {
-        if(this.props.currentPage < this.props.numPages - 1) {
-            return <a className='reactable-next-page'
-                      href={pageHref(this.props.currentPage + 1)}
-                      onClick={this.handleNext.bind(this)}>
-                      {this.props.nextPageLabel || 'Next'}
-                   </a>
+        if (this.props.currentPage < this.props.numPages - 1) {
+            return (<li className="page-item"><a className="page-link" href={pageHref(this.props.currentPage + 1)} onClick={this.handleNext.bind(this)}>Next</a></li>);
         }
     }
 
     renderPageButton(className, pageNum) {
-
-        return <a className={className}
-                  key={pageNum}
-                  href={pageHref(pageNum)}
-                  onClick={this.handlePageButton.bind(this, pageNum)}>
-                  {pageNum + 1}
-              </a>
+        return (<li className={`page-item ${className}`}><a className="page-link" onClick={this.handlePageButton.bind(this, pageNum)} href={pageHref(pageNum)}>{pageNum + 1}</a></li>);
     }
 
     render() {
@@ -67,7 +53,7 @@ export class Paginator extends React.Component {
         let pageButtonLimit = this.props.pageButtonLimit;
         let currentPage = this.props.currentPage;
         let numPages = this.props.numPages;
-        let lowerHalf = Math.round( pageButtonLimit / 2 );
+        let lowerHalf = Math.round(pageButtonLimit / 2);
         let upperHalf = (pageButtonLimit - lowerHalf);
 
         for (let i = 0; i < this.props.numPages; i++) {
@@ -77,31 +63,29 @@ export class Paginator extends React.Component {
             if (currentPage === i) {
                 className += " reactable-current-page";
             }
-            pageButtons.push( this.renderPageButton(className, pageNum));
+            pageButtons.push(this.renderPageButton(className, pageNum));
         }
 
-        if(currentPage - pageButtonLimit + lowerHalf > 0) {
-            if(currentPage > numPages - lowerHalf) {
+        if (currentPage - pageButtonLimit + lowerHalf > 0) {
+            if (currentPage > numPages - lowerHalf) {
                 pageButtons.splice(0, numPages - pageButtonLimit)
             } else {
                 pageButtons.splice(0, currentPage - pageButtonLimit + lowerHalf);
             }
         }
 
-        if((numPages - currentPage) > upperHalf) {
+        if ((numPages - currentPage) > upperHalf) {
             pageButtons.splice(pageButtonLimit, pageButtons.length - pageButtonLimit);
         }
 
         return (
-            <tbody className="reactable-pagination">
-                <tr>
-                    <td colSpan={this.props.colSpan}>
-                        {this.renderPrevious()}
-                        {pageButtons}
-                        {this.renderNext()}
-                    </td>
-                </tr>
-            </tbody>
+            <nav aria-label="Navigation">
+                <ul className="pagination">
+                    {this.renderPrevious()}
+                    {pageButtons}
+                    {this.renderNext()}
+                </ul>
+            </nav>
         );
     }
 };
