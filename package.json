@@ -15,7 +15,8 @@
   "homepage": "https://github.com/glittershark/reactable",
   "scripts": {
     "test": "./node_modules/grunt-cli/bin/grunt ci",
-    "build": "./node_modules/grunt-cli/bin/grunt build"
+    "build": "./node_modules/grunt-cli/bin/grunt build",
+    "postinstall": "patch-package"
   },
   "peerDependencies": {
     "react": "* || ^0.14.0"
