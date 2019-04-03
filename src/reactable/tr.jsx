@@ -27,7 +27,14 @@ export class Tr extends React.Component {
                         value = value.value;
                     }
 
-                    return <Td column={column} key={column.key} {...props}>{value}</Td>;
+                    let valueToPass = value; 
+                    if (value) {
+                        if (value.props) {
+                            valueToPass = value.props.children;
+                        }
+                    }
+
+                    return <Td column={column} value={valueToPass} key={column.key} {...props}>{value}</Td>;
                 } else {
                     return <Td column={column} key={column.key} />;
                 }
@@ -37,7 +44,7 @@ export class Tr extends React.Component {
         // Manually transfer props
         var props = filterPropsFrom(this.props);
 
-        return React.DOM.tr(props, children);
+        return React.createElement('tr', props, children);
     }
 };
 

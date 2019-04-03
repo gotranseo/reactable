@@ -62,17 +62,17 @@ export class Table extends React.Component {
                     return;
                 }
 
-                switch (child.type) {
-                    case Thead:
+                switch (`${child.type}`) {
+                    case `${Thead}`:
                     break;
-                    case Tfoot:
+                    case `${Tfoot}`:
                         if (typeof(tfoot) !== 'undefined') {
                             console.warn ('You can only have one <Tfoot>, but more than one was specified.' +
                                           'Ignoring all but the last one');
                         }
                         tfoot = child;
                     break;
-                    case Tr:
+                    case `${Tr}`:
                         let childData = child.props.data || {};
 
                         React.Children.forEach(child.props.children, function(descendant) {
@@ -263,7 +263,6 @@ export class Table extends React.Component {
         // Helper function to apply filter text to a list of table rows
         filter = filter.toLowerCase();
         let matchedChildren = [];
-
         for (let i = 0; i < children.length; i++) {
             let data = children[i].props.data;
 
@@ -271,7 +270,13 @@ export class Table extends React.Component {
                 if (typeof(data[filterColumn]) !== 'undefined') {
                     // Default filter
                     if (typeof(this._filterable[filterColumn]) === 'undefined' || this._filterable[filterColumn]=== 'default') {
-                        if (extractDataFrom(data, filterColumn).toString().toLowerCase().indexOf(filter) > -1) {
+                        const newData = extractDataFrom(data, filterColumn);
+                        let comparisonString = newData;
+                        if (newData.props) {
+                            comparisonString = newData.props.children;
+                        }
+
+                        if (comparisonString.toString().toLowerCase().indexOf(filter) > -1) {
                             matchedChildren.push(children[i]);
                             break;
                         }
@@ -484,6 +489,7 @@ export class Table extends React.Component {
         if (columns && columns.length > 0 && showHeaders) {
             tableHeader = (
                 <Thead columns={columns}
+                       filterPlaceholder={this.props.filterPlaceholder}
                        filtering={filtering}
                        onFilter={filter => {
                      this.setState({ filter: filter });

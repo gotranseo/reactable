@@ -22,18 +22,18 @@ export class Paginator extends React.Component {
 
     renderPrevious() {
         if (this.props.currentPage > 0) {
-            return (<li className="page-item"><a className="page-link" href={pageHref(this.props.currentPage - 1)} onClick={this.handlePrevious.bind(this)}>Previous</a></li>);
+            return (<li key={this.props.currentPage - 1} className="page-item"><a className="page-link" href={pageHref(this.props.currentPage - 1)} onClick={this.handlePrevious.bind(this)}>Previous</a></li>);
         }
     }
 
     renderNext() {
         if (this.props.currentPage < this.props.numPages - 1) {
-            return (<li className="page-item"><a className="page-link" href={pageHref(this.props.currentPage + 1)} onClick={this.handleNext.bind(this)}>Next</a></li>);
+            return (<li key={this.props.currentPage + 1} className="page-item"><a className="page-link" href={pageHref(this.props.currentPage + 1)} onClick={this.handleNext.bind(this)}>Next</a></li>);
         }
     }
 
     renderPageButton(className, pageNum) {
-        return (<li className={`page-item ${className}`}><a className="page-link" onClick={this.handlePageButton.bind(this, pageNum)} href={pageHref(pageNum)}>{pageNum + 1}</a></li>);
+        return (<li key={pageNum} className={`page-item ${className}`}><a className="page-link" onClick={this.handlePageButton.bind(this, pageNum)} href={pageHref(pageNum)}>{pageNum + 1}</a></li>);
     }
 
     render() {
@@ -61,7 +61,7 @@ export class Paginator extends React.Component {
             let pageNum = i;
             let className = "reactable-page-button";
             if (currentPage === i) {
-                className += " reactable-current-page";
+                className += " active reactable-current-page";
             }
             pageButtons.push(this.renderPageButton(className, pageNum));
         }
@@ -78,15 +78,24 @@ export class Paginator extends React.Component {
             pageButtons.splice(pageButtonLimit, pageButtons.length - pageButtonLimit);
         }
 
-        return (
-            <nav aria-label="Navigation">
-                <ul className="pagination">
-                    {this.renderPrevious()}
-                    {pageButtons}
-                    {this.renderNext()}
-                </ul>
-            </nav>
+        let component = (
+            <tbody className="reactable-pagination">
+                <tr>
+                    <td colSpan={this.props.colSpan}>
+                        <ul className="pagination">
+                            {this.renderPrevious()}
+                            {pageButtons}
+                            {this.renderNext()}
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
         );
+
+        if (numPages === 1) {
+            component = null;
+        }
+
+        return component;
     }
 };
-
